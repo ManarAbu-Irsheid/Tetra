@@ -58,6 +58,6 @@ Similarity alone is not enough to match two articles.
 ## Team
 
 - Manar Abu-Irsheid
-- [Alaa Albadawi]
-- [Sadeel Aladamat]
-- [Balqees Rwias]
+- Alaa Albadawi
+- Sadeel Aladamat
+- Balqees Rwias
