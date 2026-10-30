@@ -1,39 +1,63 @@
-# Driver Drowsiness Detection 🚗
+# Arabic News Coverage Comparison & Bias Detection 📰
 
-A real-time deep learning system that monitors a driver through a camera and detects signs of drowsiness to help prevent fatigue-related accidents.
+An NLP system that matches news stories about the same event across different Arabic news sources, then compares how each source covers it: the wording used, the facts left out, and the tone, and estimates each source's bias.
 
 > **Status:** 🚧 In progress. The project is currently in the planning phase.
 
 ## Overview
 
-The system is designed to track three key indicators of fatigue:
+News outlets often cover the same event very differently. This project aims to make those differences visible by:
 
-- **Eye closure:** detecting prolonged or frequent eye closing.
-- **Yawning:** detecting yawns as an early sign of tiredness.
-- **Head pose:** monitoring head direction and nodding.
+1. Finding articles from different sources that report the same story.
+2. Comparing each pair of articles in detail.
+3. Detecting bias in each source and visualizing it.
 
-When drowsiness is detected, the system will trigger an alert to wake the driver and draw their attention back to the road.
+## Data Sources
 
-## Planned Approach
+| Source | Purpose |
+|---|---|
+| **SaudiNewsNet** | Development and experimentation only |
+| **Arabic Billion Words** | A small sample from two newspapers over a shared time period |
+| **RSS feeds** (2-3 contrasting sources) | Real-world results; collection starts early |
 
-The project will combine three components:
+## Story Matching
 
-- **MediaPipe:** extract facial landmarks (eyes, mouth, head orientation) from the video stream in real time.
-- **CNN:** classify the state of the eyes and mouth (open/closed, yawning/not yawning).
-- **LSTM:** model the sequence of frames over time, so decisions are based on behavior across several frames rather than a single image.
+Two articles are considered the same story only if **all three** conditions hold:
 
-## Planned Features
+1. **Semantic similarity:** the articles have a similar meaning.
+2. **Date proximity:** published within one to two days of each other.
+3. **Shared named entities:** they mention common people or places.
 
-- Real-time detection from a webcam
-- Multi-signal analysis (eyes, yawning, head pose)
-- Temporal modeling for more reliable predictions
-- Automatic alert when drowsiness is detected
+Similarity alone is not enough to match two articles.
+
+## Bias Detection
+
+- **Training:** BABE dataset, using a multilingual model.
+- **Evaluation:** 300 Arabic sentences, manually labeled by the team.
+- **Comparison:** a baseline model vs. AraBERT.
+
+## Outputs
+
+- **Bias heatmap:** the bias level of each news source.
+- **Pairwise comparison report** for every matched pair of articles:
+  - Differences in wording
+  - Information omitted by each source
+  - Tone of each source
 
 ## Roadmap
 
-- [ ] Collect and prepare the dataset
-- [ ] Extract facial landmarks with MediaPipe
-- [ ] Train the CNN model
-- [ ] Train the LSTM model
-- [ ] Build the real-time detection pipeline
+- [ ] Start collecting RSS data
+- [ ] Prepare SaudiNewsNet and Arabic Billion Words samples
+- [ ] Build the story matching pipeline (similarity + date + entities)
+- [ ] Label 300 Arabic sentences for evaluation
+- [ ] Train the baseline model and AraBERT on BABE
+- [ ] Build the pairwise comparison module
+- [ ] Generate the bias heatmap
 - [ ] Evaluate and document results
+
+## Team
+
+- Manar Abu-Irsheid
+- [Alaa Albadawi]
+- [Sadeel Aladamat]
+- [Balqees Rwias]
