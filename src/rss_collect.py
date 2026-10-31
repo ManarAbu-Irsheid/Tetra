@@ -20,7 +20,7 @@ MIN_WORDS = 60
 FEED_TEXT_MIN_WORDS = 120
 
 BOILER = re.compile(
-    r"^(Published( On)?\b.*|\|?\s*آخر تحديث.*|(عاجل)+[\s,،|]*|المصدر\s*:.*|التفاصيل بعد قليل.*)$"
+    r"^((-\s*)?(Author|Role|Reporting from|Published( On)?)\b.*|(-\s*)?مدة القراءة.*|\|?\s*آخر تحديث.*|(عاجل)+[\s,،|]*|المصدر\s*:.*|التفاصيل بعد قليل.*)$"
 )
 
 
@@ -87,5 +87,16 @@ for source, url in FEEDS.items():
     print(source, "→", n, "خبر")
 
 df = pd.DataFrame(rows)
+
+def title_overlap(row):
+    tw = set(row["title_clean"].split())
+    xw = set(row["text_clean"][:400].split())
+    return len(tw & xw) / max(len(tw), 1)
+
+before = len(df)
+df["_ov"] = df.apply(title_overlap, axis=1)
+df = df.sort_values("_ov", ascending=False).drop_duplicates(subset="text", keep="first")
+df = df.drop(columns="_ov").reset_index(drop=True)
+print("حذف نصوص مكررة:", before - len(df))
 df.to_parquet(OUT, index=False)
 print("المجموع:", len(df), "→", OUT)
